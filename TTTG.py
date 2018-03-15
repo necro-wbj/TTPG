@@ -1,6 +1,6 @@
 #! python
 import random
-a = [random.randint(-1, 1) for _ in range(9)]
+a = [0 for _ in range(9)]
 player = 1
 temp = 0
 
@@ -115,7 +115,24 @@ def ai():
     elif a[7] != 0 and a[7] != player and a[4] != 0 and a[4] != player:
         temp = 2
         print("偵錯16")
-
+    elif a[0] != 0 and a[0] == a[8] and a[0] != player:
+        if a[1] == 0:
+            temp = 2
+        elif a[3] == 0:
+            temp = 4
+        elif a[5] == 0:
+            temp = 6
+        elif a[7] == 0:
+            temp = 8
+    elif a[2] != 0 and a[0] == a[6] and a[2] != player:
+        if a[1] == 0:
+            temp = 2
+        elif a[3] == 0:
+            temp = 4
+        elif a[5] == 0:
+            temp = 6
+        elif a[7] == 0:
+            temp = 8
     elif a[4] == 0:
         temp = 5
         print("偵錯17")
@@ -151,14 +168,22 @@ def ai():
     elif a[2] == 0 and a[6] == 0:
         temp = 3
         print("偵錯27")
+
     elif a[6] == 0 and a[4] == a[2]:
         temp = 7
         print("偵錯28")
     elif a[8] == 0 and a[4] == a[0]:
         temp = 9
         print("偵錯29")
+    elif a[2] == 0 and a[4] == a[6]:
+        temp = 3
+        print("偵錯28")
+    elif a[0] == 0 and a[4] == a[8]:
+        temp = 1
+        print("偵錯29")
     else:
         temp = a.index(0) + 1
+        print("偵錯其他")
 
 
 def act(arr):
@@ -191,10 +216,12 @@ def ai2():
             output[j] += h[i] * weight2[j][i] + baise[j]
     act(output)
 
+    print(output)
+
     cho = []
     for i in range(9):
         if a[i] == 0 and output[i] == 1:
-            cho.append(i)
+            cho.append(i + 1)
     t = random.choice(cho)
     temp = t
 
@@ -223,13 +250,15 @@ def human():
 
 while win():
     if player == 1:
-        player = -1
         human()
     else:
-        player = 1
-        human()
+        ai()
     u(str(temp))
     p()
+    if player == 1:
+        player = -1
+    else:
+        player = 1
     print("-----------------------------")
     print(a)
     print("-----------------------------")
