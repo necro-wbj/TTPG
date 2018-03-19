@@ -218,12 +218,6 @@ def ai2():
 
     print(output)
 
-    cho = []
-    for i in range(9):
-        if a[i] == 0 and output[i] == 1:
-            cho.append(i + 1)
-    t = random.choice(cho)
-    temp = t
 
     # print(a)
     # print(weight)
