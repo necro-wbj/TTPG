@@ -1,7 +1,7 @@
 #! python
 import random
-a = [random.randint(-1, 1) for _ in range(9)]
-# a = [0 for _ in range(9)]
+# a = [random.randint(-1, 1) for _ in range(9)]
+a = [0 for _ in range(9)]
 player = 1
 temp = 0
 
@@ -188,14 +188,9 @@ def ai():
 
 
 def act(arr):
-    global a
+    import math
     for i in range(len(arr)):
-        if arr[i] > 0:
-            arr[i] = 1
-        elif arr[i] < 0:
-            arr[i] = -1
-        else:
-            arr[i] = 0
+        arr[i] = 1 / (1 + math.exp(-arr[i]))
 
 
 def ai2():
@@ -216,8 +211,20 @@ def ai2():
         for j in range(9):
             output[j] += h[i] * weight2[j][i] + baise[j]
     act(output)
+    print(output, a)
+    b = a.copy
+    ai2()
+    u(str(temp))
+    E = []
+    for j in range(9):
+        E.append((output[j] - a[j]) * output[j] * (1 - ouput[j]))
+        for i in range(10):
+            weight2[i][j] = E[j] * 0.2 * h[i]
+    for j in range(10):
+        for i in range(9):
+            weight[i][j] = (h[j] * (1 - h[j])) * sum(E * weight2)
 
-    print(output)
+    a = b.copy()
 
     # print(a)
     # print(weight)
@@ -242,18 +249,18 @@ def human():
         temp = input('輸入錯誤!請重新輸入：')
 
 
-while win():
-    if player == 1:
-        ai2()
-    else:
-        ai()
-    u(str(temp))
-    p()
-    if player == 1:
-        player = -1
-    else:
-        player = 1
-    print("-----------------------------")
-    print(a)
-    print("-----------------------------")
-# ai2()
+# while win():
+#     if player == 1:
+#         ai2()
+#     else:
+#         ai()
+#     u(str(temp))
+#     p()
+#     if player == 1:
+#         player = -1
+#     else:
+#         player = 1
+#     print("-----------------------------")
+#     print(a)
+#     print("-----------------------------")
+ai2()
