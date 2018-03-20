@@ -5,6 +5,13 @@ a = [0 for _ in range(9)]
 player = 1
 temp = 0
 
+weight = [[random.triangular(-1, 1)for _ in range(9)]for _ in range(10)]
+h = [0 for _ in range(10)]
+s = [random.random() for _ in range(10)]
+baise = [random.random() for _ in range(9)]
+weight2 = [[random.triangular(-1, 1)for _ in range(10)]for _ in range(9)]
+output = [0 for _ in range(9)]
+
 
 def ox(a):
     if a == 0:
@@ -194,14 +201,7 @@ def act(arr):
 
 
 def ai2():
-    global a, temp
-    import random
-    weight = [[random.triangular(-1, 1)for _ in range(9)]for _ in range(10)]
-    h = [0 for _ in range(10)]
-    s = [random.random() for _ in range(10)]
-    baise = [random.random() for _ in range(9)]
-    weight2 = [[random.triangular(-1, 1)for _ in range(10)]for _ in range(9)]
-    output = [0 for _ in range(9)]
+    global a, temp, h, weight, s, output, weight2, baise
 
     for i in range(9):
         for j in range(10):
@@ -211,20 +211,22 @@ def ai2():
         for j in range(9):
             output[j] += h[i] * weight2[j][i] + baise[j]
     act(output)
-    print(output, a)
-    b = a.copy
-    ai2()
+    # 倒傳遞
+    b = a.copy()
+    ai()
     u(str(temp))
     E = []
     for j in range(9):
-        E.append((output[j] - a[j]) * output[j] * (1 - ouput[j]))
+        E.append((output[j] - a[j]) * output[j] * (1 - output[j]))
         for i in range(10):
-            weight2[i][j] = E[j] * 0.2 * h[i]
+            weight2[j][i] = E[j] * 0.2 * h[i]
+    a = b.copy()
     for j in range(10):
         for i in range(9):
-            weight[i][j] = (h[j] * (1 - h[j])) * sum(E * weight2)
-
-    a = b.copy()
+            for k in range(9):
+                ei = E[k] * weight2[k][j]
+            weight[j][i] = ((h[j] * (1 - h[j])) * ei) * 0.2 * float(a[i])
+    print(output, a)
 
     # print(a)
     # print(weight)
@@ -249,18 +251,17 @@ def human():
         temp = input('輸入錯誤!請重新輸入：')
 
 
-# while win():
-#     if player == 1:
-#         ai2()
-#     else:
-#         ai()
-#     u(str(temp))
-#     p()
-#     if player == 1:
-#         player = -1
-#     else:
-#         player = 1
-#     print("-----------------------------")
-#     print(a)
-#     print("-----------------------------")
-ai2()
+while win():
+    if player == 1:
+        ai2()
+    else:
+        ai()
+    u(str(temp))
+    p()
+    if player == 1:
+        player = -1
+    else:
+        player = 1
+    print("-----------------------------")
+    print(a)
+    print("-----------------------------")
