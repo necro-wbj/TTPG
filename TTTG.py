@@ -1,6 +1,7 @@
 #! python
 import random
-a = [0 for _ in range(9)]
+a = [random.randint(-1, 1) for _ in range(9)]
+# a = [0 for _ in range(9)]
 player = 1
 temp = 0
 
@@ -218,7 +219,6 @@ def ai2():
 
     print(output)
 
-
     # print(a)
     # print(weight)
     # print(s)
@@ -244,7 +244,7 @@ def human():
 
 while win():
     if player == 1:
-        human()
+        ai2()
     else:
         ai()
     u(str(temp))
