@@ -203,13 +203,13 @@ def act(arr):
 def ai2():
     global a, temp, h, weight, s, output, weight2, baise
 
-    for i in range(9):
-        for j in range(10):
-            h[j] += a[i] * weight[j][i] + s[j]
+    for j in range(10):
+        for i in range(9):
+            h[j] = a[i] * weight[j][i] + s[j]
     act(h)
-    for i in range(10):
-        for j in range(9):
-            output[j] += h[i] * weight2[j][i] + baise[j]
+    for j in range(9):
+        for i in range(10):
+            output[j] = h[i] * weight2[j][i] + baise[j]
     act(output)
     # 倒傳遞
     b = a.copy()
@@ -217,16 +217,17 @@ def ai2():
     u(str(temp))
     E = []
     for j in range(9):
-        E.append((output[j] - a[j]) * output[j] * (1 - output[j]))
+        E.append((a[j] - output[j]) * output[j] * (1 - output[j]))
         for i in range(10):
-            weight2[j][i] = E[j] * 0.2 * h[i]
+            weight2[j][i] = E[j] * 0.001 * h[i]
     a = b.copy()
+    ei = 0
     for j in range(10):
         for i in range(9):
             for k in range(9):
-                ei = E[k] * weight2[k][j]
-            weight[j][i] = ((h[j] * (1 - h[j])) * ei) * 0.2 * float(a[i])
-    print(output, a)
+                ei += E[k] * weight2[k][j]
+            weight[j][i] = ((h[j] * (1 - h[j])) * ei) * 0.001 * float(a[i])
+    print(output)
 
     # print(a)
     # print(weight)
@@ -251,17 +252,19 @@ def human():
         temp = input('輸入錯誤!請重新輸入：')
 
 
-while win():
-    if player == 1:
-        ai2()
-    else:
-        ai()
-    u(str(temp))
-    p()
-    if player == 1:
-        player = -1
-    else:
-        player = 1
-    print("-----------------------------")
-    print(a)
-    print("-----------------------------")
+for x in range(100):
+    a = [0 for _ in range(9)]
+    while win():
+        if player == 1:
+            ai2()
+        else:
+            ai()
+        u(str(temp))
+        p()
+        if player == 1:
+            player = -1
+        else:
+            player = 1
+        print("-----------------------------")
+        print(a)
+        print("-----------------------------")
