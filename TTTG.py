@@ -205,11 +205,11 @@ def ai2():
 
     for j in range(10):
         for i in range(9):
-            h[j] = a[i] * weight[j][i] + s[j]
+            h[j] += a[i] * weight[j][i] + s[j]
     act(h)
     for j in range(9):
         for i in range(10):
-            output[j] = h[i] * weight2[j][i] + baise[j]
+            output[j] += h[i] * weight2[j][i] + baise[j]
     act(output)
     # 倒傳遞
     b = a.copy()
