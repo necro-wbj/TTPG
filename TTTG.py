@@ -220,6 +220,7 @@ def ai2():
         E.append((a[j] - output[j]) * output[j] * (1 - output[j]))
         for i in range(10):
             weight2[j][i] = E[j] * 0.001 * h[i]
+            baise[j] = E[j] * 0.001
     a = b.copy()
     ei = 0
     for j in range(10):
