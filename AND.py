@@ -29,7 +29,6 @@ def ai2(a):
     for j in range(len(h)):
         for i in range(len(a)):
             h[j] += weight[j][i] * a[i]
-#            h=[h[j] + weight[j][a.index(i)] *i for i in a  for j in range(len (h))]
         h[j] += weight[j][2]
     act(h)
     for j in range(len(output)):
@@ -46,7 +45,7 @@ def ai2(a):
     for j in range(len(output)):
         E.append((temp[j] - output[j]) * output[j] * (1 - output[j]))
         for i in range(len(h)):
-            weight2[j][i] = weight2[j][i] * 1 * E[j] * h[i]
+            weight2[j][i] += weight2[j][i] * 1 * E[j] * h[i]
     E2 = []
     for j in range(len(h)):
         ei = 0
@@ -54,8 +53,8 @@ def ai2(a):
             ei += E[k] * weight2[k][j]
         E2.append(h[j] * (1 - h[j]) * ei)
         for i in range(len(a)):
-            weight[j][i] = weight[j][i] + 0.01 * E2[j] * a[i]
-        weight[j][i] = weight[j][2] + 0.01 * E2[j]
+            weight[j][i] += 0.01 * E2[j] * a[i]
+        weight[j][2] += 0.01 * E2[j]
     print("輸出:", output[0])
     print("輸出(轉換):", oact(output[0]))
     print("正確", temp[0])
