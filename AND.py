@@ -28,6 +28,9 @@ def ai2(a):
     global temp, weight, output, weight2
     h = [0] * 3
     output = [0 for _ in output]
+    print([i for i in weight])
+    print([i for i in weight2])
+    print("................")
     for j in range(len(h)):
         for i in range(len(a)):
             h[j] += weight[j][i] * a[i]
@@ -60,16 +63,13 @@ def ai2(a):
     print("輸出:", output[0])
     print("輸出(轉換):", oact(output[0]))
     print("正確", temp[0])
-    print("................")
-    print([i for i in weight])
-    print([i for i in weight2])
 
 
 step = 1
 S = 0
 W = 1
 # while W > S:
-for i in range(100):
+for i in range(1000):
     for j in range(len(train)):
         a = train[j]
         print("X=", a)
