@@ -1,12 +1,10 @@
 import random
 h = [0] * 3
-weight = [[random.triangular(-5, 5), random.triangular(-5, 5), 1]
-          for _ in range(len(h))]
 output = [0]
-weight2 = [[random.triangular(-5, 5)for _ in range(len(h))]
-           for _ in range(len(output))]
 temp = [0]
-train = [[0, 0], [0, 1], [1, 0], [1, 1]]
+train = [[0, 0], [0, 1], [1, 0]]
+weight = [[random.random(), random.random(), 1]for _ in range(len(h))]
+weight2 = [[random.random()for _ in range(len(h))]for _ in range(len(output))]
 # with open("xor_weight.txt", "r") as f:
 #     for line in f:
 #         for i in range(2):
@@ -20,12 +18,16 @@ def act(arr):
 
 
 def oact(arr):
-    return(round(arr))
+    if arr >= 0.5:
+        return 1
+    else:
+        return 0
 
 
 def ai2(a):
-    global temp, h, weight, output, weight2
-
+    global temp, weight, output, weight2
+    h = [0] * 3
+    output = [0 for _ in output]
     for j in range(len(h)):
         for i in range(len(a)):
             h[j] += weight[j][i] * a[i]
@@ -45,7 +47,7 @@ def ai2(a):
     for j in range(len(output)):
         E.append((temp[j] - output[j]) * output[j] * (1 - output[j]))
         for i in range(len(h)):
-            weight2[j][i] += weight2[j][i] * 1 * E[j] * h[i]
+            weight2[j][i] += 0.01 * E[j] * h[i]
     E2 = []
     for j in range(len(h)):
         ei = 0
@@ -58,13 +60,16 @@ def ai2(a):
     print("輸出:", output[0])
     print("輸出(轉換):", oact(output[0]))
     print("正確", temp[0])
+    print("................")
+    print([i for i in weight])
+    print([i for i in weight2])
 
 
 step = 1
 S = 0
 W = 1
 # while W > S:
-for i in range(1000):
+for i in range(100):
     for j in range(len(train)):
         a = train[j]
         print("X=", a)
