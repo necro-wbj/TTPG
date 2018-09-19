@@ -49,6 +49,8 @@ def check(player):
 
 start()
 while end(chessboard):
+    input_data = list()
+    expect_data = list()
     out = tr.out(chessboard).reshape((8, 8))
     # print(np.argmax(tr.out(chessboard)))
     # chessboard[chessboard == np.amax(out[check()])] = player
@@ -62,22 +64,36 @@ while end(chessboard):
     scan.update(chessboard, position // 8, position % 8, player)
     # print(out)
     if player == 1:
-        p1.append([chessboard, out])
+        p1.append([np.array(chessboard.reshape((64,))),
+                   np.array(out.reshape((64,)))])
     else:
-        p2.append([chessboard, out])
+        p2.append([np.array(chessboard.reshape((64,))),
+                   np.array(out.reshape((64,)))])
     player = next_player
-    print(p1)
 for out in p1:
-    print(out)
     if np.size(chessboard[chessboard == 1]) > np.size(chessboard[chessboard == -1]):
         out[1][out[1] == np.amax(out[1])] = 1
+        # print(out[1])
+        input_data.append(out[0])
+        expect_data.append(out[1])
     else:
         out[1][out[1] == np.amax(out[1])] = 0
+        # print(out[1].reshape((64,)))
+        input_data.append(out[0])
+        expect_data.append(out[1])
 for out in p2:
     if np.size(chessboard[chessboard == 1]) < np.size(chessboard[chessboard == -1]):
         out[1][out[1] == np.amax(out[1])] = 1
+        input_data.append(out[0].reshape((64,)))
+        expect_data.append(out[1].reshape((64,)))
     else:
         out[1][out[1] == np.amax(out[1])] = 0
+        input_data.append(out[0].reshape((64,)))
+        expect_data.append(out[1].reshape((64,)))
+batch = len(p1) + len(p2)
+
+tr.train(input_data, expect_data, batch)
+
 # print("..................................................")
 # for i in p1:
 #     print(i[0])
@@ -86,8 +102,8 @@ for out in p2:
 # for i in p2:
 #     print(i[1])
 #     print("..................................................")
-print(np.size(chessboard[chessboard == 1]),
-      np.size(chessboard[chessboard == -1]))
+# print(np.size(chessboard[chessboard == 1]),
+#       np.size(chessboard[chessboard == -1]))
 
 
 # out=tr.out(chessboard)
