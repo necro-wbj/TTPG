@@ -31,7 +31,8 @@ try:
 except Exception as e:
     print("讀檔錯誤,略過讀取已保存的權值")
 
-def out(chessboard):
+
+def predict_opt(chessboard):
     chessboard = chessboard.reshape((1, 64))
     output = model.predict(chessboard)
     return output
@@ -42,4 +43,4 @@ def train(input_data, expect_data, batch):
     expect_data = np.array(expect_data)
     print("開始訓練...")
     model.fit(input_data, expect_data, epochs=1000,
-              batch_size=batch, verbose=1, callbacks=[cp_callback])
+              batch_size=batch, verbose=0, callbacks=[cp_callback])
