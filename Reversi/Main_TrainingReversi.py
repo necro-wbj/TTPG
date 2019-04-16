@@ -7,31 +7,29 @@ import os
 def create_model():
     print("正在建立類神經網路模型...")
     model = keras.Sequential()
-    model.add(keras.layers.Dense(1000, activation='softmax'))
-    model.add(keras.layers.Dense(1000, activation='softmax'))
-    model.add(keras.layers.Dense(1000, activation='softmax'))
-    model.add(keras.layers.Dense(1000, activation='softmax'))
-    model.add(keras.layers.Dense(1000, activation='softmax'))
-    model.add(keras.layers.Dense(1000, activation='softmax'))
-    model.add(keras.layers.Dense(64, activation='softmax'))
-    adam = keras.optimizers.Adam()
+    activation = keras.activations.softsign
+    model.add(keras.layers.Dense(100, activation=activation, input_shape=(64,)))
+    for _ in range(100):
+        model.add(keras.layers.Dense(100, activation=activation))
+    model.add(keras.layers.Dense(
+        64, activation=activation))
     print("正在編譯類神經網路...")
-    model.compile(optimizer=adam, loss='categorical_crossentropy',
-                  metrics=['accuracy'])
+    model.compile(
+        optimizer=keras.optimizers.Nadam(),
+                  loss=keras.losses.MAE)
     return model
 
 
-main_checkpoint_path = './Main_Reversi.ckpt'
-checkpoint_path = './Reversi.ckpt'
-checkpoint_dir = os.path.dirname(main_checkpoint_path)
-cp_callback = tf.keras.callbacks.ModelCheckpoint(
-    main_checkpoint_path, save_weights_only=True, verbose=1, period=1000)
-model = create_model()
-print("讀取已保存的權值...")
-try:
-    model.load_weights(main_checkpoint_path)
-except Exception as e:
-    print("讀檔錯誤,略過讀取已保存的權值")
+if os.path.isfile('./Main_Reversi.h5'):
+    print('初始化: ')
+    model = keras.models.load_model('Main_Reversi.h5')
+    print("讀取已保存的主要網路模型...")
+else:
+    main_checkpoint_path = './Main_Reversi.ckpt'
+    checkpoint_path = './Reversi.ckpt'
+    checkpoint_dir = os.path.dirname(main_checkpoint_path)
+    model = create_model()
+    print('讀取錯誤!!重新建立主要網路模型...')
 
 
 def predict_opt(chessboard):
@@ -39,14 +37,16 @@ def predict_opt(chessboard):
     output = model.predict(chessboard).reshape(8, 8)
     return output
 
-
 def update_weights(input_data, expect_data, batch):
-    try:
-        model.load_weights(checkpoint_path)
-    except Exception as e:
-        print(e)
-    input_data = np.array(input_data)
-    expect_data = np.array(expect_data)
+    import TrainingReversi as tr
+    global model
+    tr.reload()
     print("主要網路更新權重...")
-    model.fit(input_data, expect_data,
-              batch_size=batch, callbacks=[cp_callback])
+    model = keras.models.load_model('Reversi.h5')
+    model.save('Main_Reversi.h5')
+
+def reload():
+    global model
+    print('釋放GPU資源...')
+    keras.backend.clear_session()
+    model = keras.models.load_model('Reversi.h5')
