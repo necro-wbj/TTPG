@@ -1,2 +1,0 @@
-model_checkpoint_path: "Reversi.ckpt"
-all_model_checkpoint_paths: "Reversi.ckpt"
